@@ -1,0 +1,219 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Users API",
+    "description" : "This is a Spec file Users API. This is just a demo for the Apigee course",
+    "contact" : {
+      "email" : "sanjay.bharatiya@gmail.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/bharatiyas/users-api/1.0.0",
+    "description" : "Users API Mock Server"
+  } ],
+  "tags" : [ {
+    "name" : "users",
+    "description" : "Manage Users for the System"
+  } ],
+  "paths" : {
+    "/v1/users" : {
+      "get" : {
+        "tags" : [ "users" ],
+        "summary" : "Get all users",
+        "operationId" : "getAllUsers",
+        "responses" : {
+          "200" : {
+            "description" : "User found by the supplied ID",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authentication information is missing or invalid.",
+            "headers" : {
+              "WWW_Authenticate" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "body" : {
+                "example" : "Basic Authentication required. Please authenticate."
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "basicAuthentication" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "users" ],
+        "summary" : "Register a new user",
+        "operationId" : "registerUser",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Register a new User"
+          },
+          "401" : {
+            "description" : "Authentication information is missing or invalid.",
+            "headers" : {
+              "WWW_Authenticate" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "body" : {
+                "example" : "Basic Authentication required. Please authenticate."
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "basicAuthentication" : [ ]
+        } ]
+      }
+    },
+    "/v1/users/{userId}" : {
+      "get" : {
+        "tags" : [ "users" ],
+        "summary" : "Gets the details of the user by ID.",
+        "description" : "Returns the details of the user",
+        "operationId" : "getUserById",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "ID of user to return",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "User found by the supplied ID",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authentication information is missing or invalid.",
+            "headers" : {
+              "WWW_Authenticate" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "body" : {
+                "example" : "Basic Authentication required. Please authenticate."
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        },
+        "security" : [ {
+          "basicAuthentication" : [ ]
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "User" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "string",
+            "example" : "1234456"
+          },
+          "firstName" : {
+            "type" : "string",
+            "example" : "Johnny"
+          },
+          "lastName" : {
+            "type" : "string",
+            "example" : "Smithh"
+          },
+          "dateOfBirth" : {
+            "type" : "string",
+            "format" : "date",
+            "example" : "2000-01-20"
+          },
+          "gender" : {
+            "$ref" : "#/components/schemas/Gender"
+          }
+        }
+      },
+      "Gender" : {
+        "type" : "string",
+        "enum" : [ "Male", "Female", "Undisclosed" ]
+      }
+    },
+    "responses" : {
+      "UnauthorizedError" : {
+        "description" : "Authentication information is missing or invalid.",
+        "headers" : {
+          "WWW_Authenticate" : {
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        },
+        "content" : {
+          "body" : {
+            "example" : "Basic Authentication required. Please authenticate."
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "basicAuthentication" : {
+        "type" : "http",
+        "scheme" : "basic"
+      }
+    }
+  }
+}
